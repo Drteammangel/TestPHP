@@ -1,32 +1,46 @@
 <?php
 header("Content-Type: text/html;charset=utf-8");
 $user_id = $_GET["user_id"];
-$user_name = $_GET["user_name"];
-$user_sex = $_GET["user_sex"];
-$user_grade = $_GET["user_grade"];
-$user_degree = $_GET["user_degree"];
-$user_comment = $_GET["user_comment"];
-$user_avatar = $_GET["user_avatar"];
+$charset = "utf8";
 
+$con = mysql_connect("localhost:3306", "root", "system");
+
+mysql_query("SET character_set_connection=$charset, character_set_results=$charset, character_set_client=binary", $con);
+
+mysql_select_db("test", $con);
+$sql = "SELECT * FROM user_info where user_id = $user_id";
+$result = mysql_query($sql, $con) or die(mysql_error());
+$row = mysql_fetch_array($result, MYSQL_ASSOC);
+$user_name = $row["user_name"];
+$user_sex = $row["user_sex"];
+$user_grade = $row["user_grade"];
+$user_degree = $row["user_degree"];
+$user_comment = $row["user_comment"];
+$user_avatar = $row["user_avatar"];
 ?>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>update.php</title>
     <script>
-        function show_confirm(){
+        //提示是否确认修改
+        function show_confirm() {
             var s = confirm("确认修改？");
-            if(s == true) {
-                alert("成功");
-                //document.forms[0].submit();
+            if (s == true) {
+                if(document.forms[0].sex[0].checked) {
+                    document.forms[0].user_sex.value = "male";
+                } else {
+                    document.forms[0].user_sex.value = "female";
+                }
+                document.forms[0].flag.value = "update";
+                document.forms[0].submit();
             } else {
-                alert("取消");
             }
         }
     </script>
 </head>
 <body>
-<form action="">
+<form action="data.php" method="get">
     <table>
         <tr>
             <td>id</td>
@@ -38,7 +52,9 @@ $user_avatar = $_GET["user_avatar"];
         </tr>
         <tr>
             <td>性别</td>
-            <td><input type="text" name="user_sex" value="<?php echo $user_sex ?>"></td>
+            <td><input type="radio" name="sex" <?php if($user_sex=="male") echo("checked")?>>男
+                <input type="radio" name="sex" <?php if($user_sex=="female") echo("checked")?>>女
+                <input type="hidden" name="user_sex"></td>
         </tr>
         <tr>
             <td>年级</td>
