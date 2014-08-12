@@ -15,10 +15,10 @@ $result = mysql_query($sql, $con) or die(mysql_error());
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>index.php</title>
-    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
-    <script src="/jquery.min.js"></script>
-    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
     <script>
         function DataUpdate() {
             document.forms[0].flag.value = 1;
@@ -67,53 +67,70 @@ $result = mysql_query($sql, $con) or die(mysql_error());
     </script>
 </head>
 <body>
-<form action="update.php" method="post">
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <td align="center">选定</td>
-            <td align="center">id</td>
-            <td align="center">姓名</td>
-            <td align="center">性别</td>
-            <td align="center">年级</td>
-            <td align="center">学历</td>
-            <td align="center">备注</td>
-            <!--            <td align="center">头像</td>-->
-            <td align="center">操作</td>
-        </tr>
-        </thead>
-        <?php
-        while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-            $user_id = $row['user_id'];
-            $user_name = $row['user_name'];
-            $user_sex = $row['user_sex'];
-            $user_grade = $row['user_grade'];
-            $user_degree = $row['user_degree'];
-            $user_comment = $row['user_comment'];
-            $user_avatar = $row['user_avatar'];
-            ?>
-            <tr>
-                <td><input type="checkbox" name="check"></td>
-                <td><?php echo $user_id; ?></td>
-                <td><?php echo $user_name; ?></td>
-                <td><?php echo $user_sex; ?></td>
-                <td><?php echo $user_grade; ?></td>
-                <td><?php echo $user_degree; ?></td>
-                <td><?php echo $user_comment; ?></td>
-                <!--                <td>--><?php //echo $user_avatar; ?><!--</td>-->
-                <td><a href="update.php?user_id=<?php echo $user_id; ?>">修改</a>
-                    <a href="delete.php?user_id=<?php echo $user_id; ?>">删除</a></td>
-            </tr>
-        <?php
-        }
-        mysql_close($con);
-        ?>
-    </table>
-    <input type="hidden" name="flag">
-    <input type="button" value="全选" onclick="selectAll()">
-    <input type="button" value="反选" onclick="selectInverse()">
-    <input type="button" value="添加" onclick="DataInsert()">
-    <input type="button" value="删除" onclick="DataDelete()">
-</form>
+<div style="width: 80%; margin-left: 10%; margin-right: 10%; margin-top: 5%;">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            会员后台管理
+            <span style="position: relative; left: 73%">
+                <input type="text" name="searchBox">
+                <input type="button" class="btn btn-sm" name="search" value="搜索">
+            </span>
+        </div>
+        <div class="panel-body">
+            <form action="update.php" method="post">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <td align="center">选定</td>
+                        <td align="center">id</td>
+                        <td align="center">姓名</td>
+                        <td align="center">性别</td>
+                        <td align="center">年级</td>
+                        <td align="center">学历</td>
+                        <td align="center">备注</td>
+                        <!--            <td align="center">头像</td>-->
+                        <td align="center">操作</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                    while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+                        $user_id = $row['user_id'];
+                        $user_name = $row['user_name'];
+                        $user_sex = $row['user_sex'];
+                        $user_grade = $row['user_grade'];
+                        $user_degree = $row['user_degree'];
+                        $user_comment = $row['user_comment'];
+                        $user_avatar = $row['user_avatar'];
+                        ?>
+                        <tr>
+                            <td><input type="checkbox" name="check"></td>
+                            <td><?php echo $user_id; ?></td>
+                            <td><?php echo $user_name; ?></td>
+                            <td><?php echo $user_sex; ?></td>
+                            <td><?php echo $user_grade; ?></td>
+                            <td><?php echo $user_degree; ?></td>
+                            <td><?php echo $user_comment; ?></td>
+                            <!--                            <td>--><?php //echo $user_avatar; ?><!--</td>-->
+                            <td><a href="update.php?user_id=<?php echo $user_id; ?>">修改</a>
+                                <a href="delete.php?user_id=<?php echo $user_id; ?>">删除</a></td>
+                        </tr>
+                    <?php
+                    }
+                    mysql_close($con);
+                    ?>
+                    </tbody>
+                </table>
+                <input type="hidden" name="flag">
+                <input type="button" class="btn btn-sm" value="全选" onclick="selectAll()">
+                <input type="button" class="btn btn-sm" value="反选" onclick="selectInverse()">
+            </form>
+        </div>
+        <div class="panel-footer">
+            <input type="button" class="btn btn-primary" value="添加" onclick="DataInsert()">
+            <input type="button" class="btn btn-primary" value="删除" onclick="DataDelete()">
+        </div>
+    </div>
+</div>
 </body>
 </html>

@@ -18,6 +18,7 @@ $user_degree = $row["user_degree"];
 $user_comment = $row["user_comment"];
 $user_avatar = $row["user_avatar"];
 ?>
+
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -27,7 +28,7 @@ $user_avatar = $row["user_avatar"];
         function show_confirm() {
             var s = confirm("确认修改？");
             if (s == true) {
-                if(document.forms[0].sex[0].checked) {
+                if (document.forms[0].sex[0].checked) {
                     document.forms[0].user_sex.value = "male";
                 } else {
                     document.forms[0].user_sex.value = "female";
@@ -40,7 +41,7 @@ $user_avatar = $row["user_avatar"];
     </script>
 </head>
 <body>
-<form action="data.php" method="get">
+<form action="data.php" method="get" enctype="multipart/form-data">
     <table>
         <tr>
             <td>id</td>
@@ -52,8 +53,8 @@ $user_avatar = $row["user_avatar"];
         </tr>
         <tr>
             <td>性别</td>
-            <td><input type="radio" name="sex" <?php if($user_sex=="male") echo("checked")?>>男
-                <input type="radio" name="sex" <?php if($user_sex=="female") echo("checked")?>>女
+            <td><input type="radio" name="sex" <?php if ($user_sex == "male") echo("checked") ?>>男
+                <input type="radio" name="sex" <?php if ($user_sex == "female") echo("checked") ?>>女
                 <input type="hidden" name="user_sex"></td>
         </tr>
         <tr>
@@ -70,7 +71,19 @@ $user_avatar = $row["user_avatar"];
         </tr>
         <tr>
             <td>头像</td>
-            <td><input type="text" name="user_avatar" value="<?php echo $user_avatar ?>"></td>
+            <td>
+                <?php
+                if ($user_avatar == "") {
+                    echo "暂无照片".$user_avatar;
+                    ?>
+                    <input type="file" name="photo">
+                    <input type="hidden" name="user_avatar">
+                <?php
+                } else
+                    echo "<img src='$user_avatar' width='150' border=0>";
+                ?>
+                <!--                <input type="file" name="user_avatar" value="-->
+                <?php //echo $user_avatar ?><!--"></td>-->
         </tr>
         <tr>
             <td><input type="button" onclick="show_confirm()" value="提交"></td>
