@@ -1,14 +1,9 @@
 <?php
-header("Content-Type: text/html;charset=utf-8");
+include_once('mysql.php');
+$con = connectDb();
+
 $user_id = $_GET["user_id"];
-$charset = "utf8";
-
-$con = mysql_connect("localhost:3306", "root", "system");
-
-mysql_query("SET character_set_connection=$charset, character_set_results=$charset, character_set_client=binary", $con);
-
-mysql_select_db("test", $con);
-$sql = "SELECT * FROM user_info where user_id = $user_id";
+$sql = "SELECT * FROM user_info where user_id = '$user_id'";
 $result = mysql_query($sql, $con) or die(mysql_error());
 $row = mysql_fetch_array($result, MYSQL_ASSOC);
 $user_name = $row["user_name"];
@@ -23,6 +18,9 @@ $user_avatar = $row["user_avatar"];
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>update.php</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
     <script>
         //提示是否确认修改
         function show_confirm() {
@@ -38,60 +36,108 @@ $user_avatar = $row["user_avatar"];
             } else {
             }
         }
+        function delete_photo() {
+            var url = "deletePhoto.php";
+            url += "?user_id=" + document.forms[0].user_id.value;
+            location.href = url;
+        }
     </script>
+    <style>
+        #left {
+            position: absolute;
+            left: 350px;
+            /*right: 500px;*/
+            top: 100px;
+            bottom: 400px;
+            width: 300px;
+        }
+
+        #right {
+            position: absolute;
+            left: 650px;
+            /*right: 40%;*/
+            top: 100px;
+            bottom: 400px;
+            width: 300px;
+        }
+
+        #bottom {
+            position: absolute;
+            left: 350px;
+            /*right: 30%;*/
+            top: 400px;
+            bottom: 10%;
+            width: 600px;
+        }
+    </style>
 </head>
 <body>
-<form action="data.php" method="get" enctype="multipart/form-data">
-    <table>
-        <tr>
-            <td>id</td>
-            <td><input type="text" name="user_id" value="<?php echo $user_id ?>"></td>
-        </tr>
-        <tr>
-            <td>姓名</td>
-            <td><input type="text" name="user_name" value="<?php echo $user_name ?>"></td>
-        </tr>
-        <tr>
-            <td>性别</td>
-            <td><input type="radio" name="sex" <?php if ($user_sex == "male") echo("checked") ?>>男
-                <input type="radio" name="sex" <?php if ($user_sex == "female") echo("checked") ?>>女
-                <input type="hidden" name="user_sex"></td>
-        </tr>
-        <tr>
-            <td>年级</td>
-            <td><input type="text" name="user_grade" value="<?php echo $user_grade ?>"></td>
-        </tr>
-        <tr>
-            <td>学历</td>
-            <td><input type="text" name="user_degree" value="<?php echo $user_degree ?>"></td>
-        </tr>
-        <tr>
-            <td>备注</td>
-            <td><input type="text" name="user_comment" value="<?php echo $user_comment ?>"></td>
-        </tr>
-        <tr>
-            <td>头像</td>
-            <td>
-                <?php
-                if ($user_avatar == "") {
-                    echo "暂无照片".$user_avatar;
+<form action="dataUpdate.php" method="post" enctype="multipart/form-data">
+    <div class="form-group" id="left">
+        <table class="table">
+            <caption>修改信息</caption>
+            <tbody>
+            <tr>
+                <th>id</th>
+                <td><input type="text" name="user_id" value="<?php echo $user_id ?>"></td>
+            </tr>
+            <tr>
+                <th>姓名</th>
+                <td><input type="text" name="user_name" value="<?php echo $user_name ?>"></td>
+            </tr>
+            <tr>
+                <th>性别</th>
+                <td><input type="radio" name="sex" <?php if ($user_sex == "male") echo("checked") ?>>男
+                    <input type="radio" name="sex" <?php if ($user_sex == "female") echo("checked") ?>>女
+                    <input type="hidden" name="user_sex"></td>
+            </tr>
+            <tr>
+                <th>年级</th>
+                <td><input type="text" name="user_grade" value="<?php echo $user_grade ?>"></td>
+            </tr>
+            <tr>
+                <th>学历</th>
+                <td><input type="text" name="user_degree" value="<?php echo $user_degree ?>"></td>
+            </tr>
+            </tbody>
+        </table>
+        <input type="hidden" name="flag">
+    </div>
+    <div class="form-group" id="right">
+        <table class="table">
+            <caption>头像</caption>
+            <!--            <tr>-->
+            <!--                <td>头像</td>-->
+            <!--            </tr>-->
+            <tr>
+                <td>
+                    <?php
+                    if ($user_avatar == "") {
+//                    echo "暂无照片" . $user_avatar;
+                        ?>
+                        <img src="photos/default.jpg" title="暂无照片"><br/>
+                        <input type="file" name="photo">
+                        <input type="hidden" name="user_avatar">
+                    <?php
+                    } else {
+                        echo "<img src='$user_avatar' width='150' border=0 title='头像'><br/>";
+                        echo "<input type='button' value='删除照片' onclick='delete_photo()'>";
+                    }
                     ?>
-                    <input type="file" name="photo">
-                    <input type="hidden" name="user_avatar">
-                <?php
-                } else
-                    echo "<img src='$user_avatar' width='150' border=0>";
-                ?>
-                <!--                <input type="file" name="user_avatar" value="-->
-                <?php //echo $user_avatar ?><!--"></td>-->
-        </tr>
-        <tr>
-            <td><input type="button" onclick="show_confirm()" value="提交"></td>
-        </tr>
-        <tr>
-            <td><input type="hidden" name="flag"></td>
-        </tr>
-    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="form-group" id="bottom">
+        <table class="table">
+            <tr>
+                <th colspan="3">备注</th>
+                <td colspan="3"><textarea rows="5" cols="60" name="user_comment" style="resize: none;"><?php echo $user_comment ?></textarea>
+                </td>
+            </tr>
+        </table>
+        <input type="button" onclick="show_confirm()" value="修改">
+    </div>
 </form>
 </body>
 </html>

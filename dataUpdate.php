@@ -6,13 +6,13 @@ $con = connectDb();
 
 $user_id = $_POST['user_id'];
 $user_name = $_POST['user_name'];
-$user_sex = isset($_POST['user_sex'])?$_POST['user_sex']:null;
+$user_sex = $_POST['user_sex'];
 $user_grade = $_POST['user_grade'];
 $user_degree = $_POST['user_degree'];
 $user_comment = $_POST['user_comment'];
-$user_avatar = null;
+$user_avatar = $_POST['user_avatar'];
 //上传照片，存入数据库
-if ($_FILES['photo']['name'] != "") {
+if ($_FILES["photo"]["name"] != "") {
     $uploadDir = "photos/"; //照片保存目录
 
     $filename = explode(".", $_FILES['photo']['name']);
@@ -24,12 +24,12 @@ if ($_FILES['photo']['name'] != "") {
     echo '<hr>';
     move_uploaded_file($_FILES['photo']['tmp_name'], $user_avatar);
 }
-echo("$user_name");
-$sql = "insert into user_info(user_id, user_name, user_sex, user_grade, user_degree, user_comment, user_avatar) values ('" . $user_id . "','" . urlencode($user_name) . "','" . $user_sex . "','" . urlencode($user_grade) . "','" . urlencode($user_degree) . "','" . urlencode($user_comment) . "','" . $user_avatar . "')";
+$sql = "update user_info set user_name='".$user_name."', user_sex='".$user_sex."', user_grade='".$user_grade."', user_degree='".$user_degree."', user_comment='".$user_comment."', user_avatar='".$user_avatar."' where user_id='".$user_id."'";
+
 mysql_query($sql, $con) or die(mysql_error());
 echo('
     <script>
-        alert("添加成功！");
+        alert("修改成功！");
         window.location.href = document.referrer;
     </script>');
 ?>

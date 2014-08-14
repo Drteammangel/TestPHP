@@ -1,14 +1,15 @@
 <?php
-header("Content-Type: text/html;charset=utf-8");
-$charset = "utf8";
+include_once('mysql.php');
+$con = connectDb();
 
-$con = mysql_connect("localhost:3306", "root", "system");
+//每页显示的留言数
+$pageSize = 10;
+//确定页数 p 参数
+$p = isset($_GET['p']) ? $_GET['p'] : 1;
+//数据指针
+$offset = ($p - 1) * $pageSize;
 
-mysql_query("SET character_set_connection=$charset, character_set_results=$charset, character_set_client=binary", $con);
-
-mysql_select_db("test", $con);
-
-$sql = "SELECT * FROM user_info";
+$sql = "SELECT * FROM user_info order by user_id limit $offset, $pageSize";
 $result = mysql_query($sql, $con) or die(mysql_error());
 ?>
 <html>
@@ -67,13 +68,13 @@ $result = mysql_query($sql, $con) or die(mysql_error());
     </script>
 </head>
 <body>
-<div style="width: 80%; margin-left: 10%; margin-right: 10%; margin-top: 5%;">
+<div style="width: 80%; margin-left: 10%; margin-top: 3%;">
     <div class="panel panel-default">
         <div class="panel-heading">
             会员后台管理
-            <span style="position: relative; left: 73%">
+            <span style="position: absolute; right: 12%">
                 <input type="text" name="searchBox">
-                <input type="button" class="btn btn-sm" name="search" value="搜索">
+                <input type="button" class="btn btn-sm" name="search" value="搜索" onclick="">
             </span>
         </div>
         <div class="panel-body">
@@ -93,7 +94,7 @@ $result = mysql_query($sql, $con) or die(mysql_error());
                     </tr>
                     </thead>
                     <tbody>
-                    <?php
+                    <?php //显示查询结果
                     while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                         $user_id = $row['user_id'];
                         $user_name = $row['user_name'];
@@ -113,17 +114,46 @@ $result = mysql_query($sql, $con) or die(mysql_error());
                             <td><?php echo $user_comment; ?></td>
                             <!--                            <td>--><?php //echo $user_avatar; ?><!--</td>-->
                             <td><a href="update.php?user_id=<?php echo $user_id; ?>">修改</a>
-                                <a href="delete.php?user_id=<?php echo $user_id; ?>">删除</a></td>
+                                <a href="delete.php?user_id=<?php echo $user_id; ?>">删除</a>
+                                <a href="update.php?user_id=<?php echo $user_id; ?>">详细</a></td>
                         </tr>
                     <?php
                     }
-                    mysql_close($con);
                     ?>
                     </tbody>
                 </table>
                 <input type="hidden" name="flag">
                 <input type="button" class="btn btn-sm" value="全选" onclick="selectAll()">
                 <input type="button" class="btn btn-sm" value="反选" onclick="selectInverse()">
+                <?php
+                //分页代码
+                //计算留言总数
+                $count_result = mysql_query("SELECT count(*) as count FROM user_info", $con);
+                $count_array = mysql_fetch_array($count_result);
+
+                //计算总的页数
+                $pageNum = ceil($count_array['count'] / $pageSize);
+                echo "<span style='position: absolute; right: 12%'>";
+                //                echo '共 ', $count_array['count'], ' 条记录';
+
+                //循环输出各页数目及连接
+                if ($pageNum > 1) {
+                    echo "<ul class='pagination'>";
+                    echo "<li><a href='index.php?p=1'>&laquo;</a></li>";
+                    for ($i = 1; $i <= $pageNum; $i++) {
+                        if ($i == $p) {
+                            echo '<li class="active"><a href="index.php?p=' . $i . '">' . $i . '</a></li>';
+//                            echo ' [', $i, ']';
+                        } else {
+                            echo ' <li><a href="index.php?p=', $i, '">', $i, '</a></li>';
+                        }
+                    }
+                    echo "<li><a href='index.php?p=" . $pageNum . "'>&raquo;</a></li>";
+                    echo "</ul>";
+                }
+                echo "</span>";
+                mysql_close($con);
+                ?>
             </form>
         </div>
         <div class="panel-footer">
