@@ -6,11 +6,11 @@ $user_id = $_GET["user_id"];
 $sql = "SELECT * FROM user_info where user_id = '$user_id'";
 $result = mysql_query($sql, $con) or die(mysql_error());
 $row = mysql_fetch_array($result, MYSQL_ASSOC);
-$user_name = $row["user_name"];
+$user_name = urldecode($row["user_name"]);
 $user_sex = $row["user_sex"];
-$user_grade = $row["user_grade"];
-$user_degree = $row["user_degree"];
-$user_comment = $row["user_comment"];
+$user_grade = urldecode($row["user_grade"]);
+$user_degree = urldecode($row["user_degree"]);
+$user_comment = urldecode($row["user_comment"]);
 $user_avatar = $row["user_avatar"];
 ?>
 
@@ -19,6 +19,7 @@ $user_avatar = $row["user_avatar"];
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>update.php</title>
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="mystyle.css" rel="stylesheet">
     <script src="jquery.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script>
@@ -42,34 +43,6 @@ $user_avatar = $row["user_avatar"];
             location.href = url;
         }
     </script>
-    <style>
-        #left {
-            position: absolute;
-            left: 350px;
-            /*right: 500px;*/
-            top: 100px;
-            bottom: 400px;
-            width: 300px;
-        }
-
-        #right {
-            position: absolute;
-            left: 650px;
-            /*right: 40%;*/
-            top: 100px;
-            bottom: 400px;
-            width: 300px;
-        }
-
-        #bottom {
-            position: absolute;
-            left: 350px;
-            /*right: 30%;*/
-            top: 400px;
-            bottom: 10%;
-            width: 600px;
-        }
-    </style>
 </head>
 <body>
 <form action="dataUpdate.php" method="post" enctype="multipart/form-data">
@@ -110,7 +83,7 @@ $user_avatar = $row["user_avatar"];
             <!--                <td>头像</td>-->
             <!--            </tr>-->
             <tr>
-                <td>
+                <td style="text-align: center;">
                     <?php
                     if ($user_avatar == "") {
 //                    echo "暂无照片" . $user_avatar;
@@ -120,7 +93,7 @@ $user_avatar = $row["user_avatar"];
                         <input type="hidden" name="user_avatar">
                     <?php
                     } else {
-                        echo "<img src='$user_avatar' width='150' border=0 title='头像'><br/>";
+                        echo "<img src='$user_avatar' width='200' height='200' border=0 title='头像'><br/>";
                         echo "<input type='button' value='删除照片' onclick='delete_photo()'>";
                     }
                     ?>

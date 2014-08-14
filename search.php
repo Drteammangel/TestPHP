@@ -2,15 +2,22 @@
 include_once('mysql.php');
 $con = connectDb();
 
+$item = isset($_GET["item"])?$_GET["item"]:null;
+
 //每页显示的留言数
 $pageSize = 10;
 //确定页数 p 参数
 $p = isset($_GET['p']) ? $_GET['p'] : 1;
 //数据指针
 $offset = ($p - 1) * $pageSize;
-
-$sql = "SELECT * FROM user_info order by user_id limit $offset, $pageSize";
-$result = mysql_query($sql, $con) or die(mysql_error());
+if(isset($item)) {
+    $sql = "select * from user_info order by user_id limit $offset, $pageSize";
+    $sql1 = "SELECT count(*) as count FROM user_info";
+} else {
+    $sql = "SELECT * FROM user_info where user_id = '$item' or user_name like '$item' or user_comment like '$item' or user_degree like '$item' or user_grade like '$item' order by user_id limit $offset, $pageSize";
+    $sql1 = "SELECT count(*) as count FROM user_info where user_id = '$item' or user_name like '$item' or user_comment like '$item' or user_degree like '$item' or user_grade like '$item'";
+}
+    $result = mysql_query($sql, $con) or die(mysql_error());
 ?>
 <html>
 <head>
@@ -21,11 +28,6 @@ $result = mysql_query($sql, $con) or die(mysql_error());
     <script src="jquery.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script>
-        function DataUpdate() {
-            document.forms["list"].flag.value = 1;
-            alert(document.forms[0].id.value);
-            location.href = 'update.php';
-        }
         //打开“新增信息”窗口，居中显示
         function DataInsert() {
             var url = 'insert.php'; //要打开的窗口
@@ -36,7 +38,7 @@ $result = mysql_query($sql, $con) or die(mysql_error());
             var aLeft = (screen.availWidth - aWidth) / 2; //窗口放中央,一般不需要改
             var param0 = "scrollbars=0,status=0,menubar=0,resizable=2,location=0"; //新窗口的参数
             var params = "top=" + aTop + ",left=" + aLeft + ",width=" + aWidth + ",height=" + aHeight + "," + param0;
-            window.open(url, winName, params);
+            var myWindow = window.open(url, winName, params);
         }
         //删除数据
         function DataDelete() {
@@ -51,7 +53,11 @@ $result = mysql_query($sql, $con) or die(mysql_error());
         function selectInverse() {
             var n = document.forms["list"].check.length;//得到复选框的个数
             for (var i = 0; i < n; i++) {
-                document.forms["list"].check[i].checked = !document.forms["list"].check[i].checked;
+                if (document.forms["list"].check[i].checked) {
+                    document.forms["list"].check[i].checked = false;
+                } else {
+                    document.forms["list"].check[i].checked = true;
+                }
             }
         }
         //全选
@@ -61,45 +67,40 @@ $result = mysql_query($sql, $con) or die(mysql_error());
                 document.forms["list"].check[i].checked = true;
             }
         }
-        function search() {
+        function search(){
             var url = "search.php";
             url += "?item=" + document.forms["searchItem"].searchBox.value;
             location.href = url;
         }
     </script>
-    <style>
-        .td {
-            text-align: center;
-        }
-    </style>
 </head>
 <body>
 <?php include_once "head.php"; ?>
 <div style="width: 80%; margin-left: 10%; margin-top: 3%;">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <form name="searchItem">
-                会员后台管理
+            会员后台管理
             <span style="position: absolute; right: 12%">
-                    <input type="text" name="searchBox" id="searchBox">
-                    <label for="searchBox"><input type="button" class="btn btn-sm" value="搜索" onclick="search()"></label>
+                <form name="searchItem">
+                    <input type="text" name="searchBox">
+                    <input type="button" class="btn btn-sm" value="搜索" onclick="search()">
+                </form>
             </span>
-            </form>
         </div>
         <div class="panel-body">
             <form action="update.php" method="post" name="list">
                 <table class="table table-bordered">
                     <thead>
                     <tr>
-                        <th class="td"><label for="check">选定</label></th>
-                        <th class="td">id</th>
-                        <th class="td">姓名</th>
-                        <th class="td">性别</th>
-                        <th class="td">年级</th>
-                        <th class="td">学历</th>
-                        <th class="td">备注</th>
-                        <!--            <td class="th">头像</th>-->
-                        <th class="td">操作</th>
+                        <td align="center">选定</td>
+                        <td align="center">id</td>
+                        <td align="center">姓名</td>
+                        <td align="center">性别</td>
+                        <td align="center">年级</td>
+                        <td align="center">学历</td>
+                        <td align="center">备注</td>
+                        <!--            <td align="center">头像</td>-->
+                        <td align="center">操作</td>
                     </tr>
                     </thead>
                     <tbody>
@@ -114,7 +115,7 @@ $result = mysql_query($sql, $con) or die(mysql_error());
                         $user_avatar = $row['user_avatar'];
                         ?>
                         <tr>
-                            <td><input type="checkbox" name="check" id="check"></td>
+                            <td><input type="checkbox" name="check"></td>
                             <td><?php echo $user_id; ?></td>
                             <td><?php echo $user_name; ?></td>
                             <td><?php echo $user_sex; ?></td>
@@ -137,7 +138,7 @@ $result = mysql_query($sql, $con) or die(mysql_error());
                 <?php
                 //分页代码
                 //计算留言总数
-                $count_result = mysql_query("SELECT count(*) as count FROM user_info", $con);
+                $count_result = mysql_query($sql1, $con);
                 $count_array = mysql_fetch_array($count_result);
 
                 //计算总的页数
