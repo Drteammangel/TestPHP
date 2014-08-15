@@ -72,7 +72,7 @@ header("Content-Type: text/html;charset=utf-8");
         <table class="table">
             <caption>头像</caption>
             <tr>
-                <td><input type="file" name="photo"></td>
+                <td><input type="file" size="40" name="photo"></td>
             </tr>
         </table>
     </div>

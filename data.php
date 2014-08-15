@@ -4,6 +4,7 @@ $con = connectDb();
 ?>
 <?php
 
+echo "<script>alert('upload')</script>";
 $user_id = $_POST['user_id'];
 $user_name = $_POST['user_name'];
 $user_sex = isset($_POST['user_sex'])?$_POST['user_sex']:null;
@@ -14,7 +15,7 @@ $user_avatar = null;
 //上传照片，存入数据库
 if ($_FILES['photo']['name'] != "") {
     $uploadDir = "photos/"; //照片保存目录
-
+    echo "<script>alert('before upload')</script>";
     $filename = explode(".", $_FILES['photo']['name']);
     do {
         $filename[0] = $user_id;
@@ -23,6 +24,7 @@ if ($_FILES['photo']['name'] != "") {
     } while (file_exists($user_avatar));
     echo '<hr>';
     move_uploaded_file($_FILES['photo']['tmp_name'], $user_avatar);
+    echo "<script>alert('after upload')</script>";
 }
 echo("$user_name");
 $sql = "insert into user_info(user_id, user_name, user_sex, user_grade, user_degree, user_comment, user_avatar) values ('" . $user_id . "','" . $user_name . "','" . $user_sex . "','" . $user_grade . "','" . $user_degree . "','" . $user_comment . "','" . $user_avatar . "')";

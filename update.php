@@ -92,8 +92,7 @@ $user_avatar = $row["user_avatar"];
 //                    echo "暂无照片" . $user_avatar;
                         ?>
                         <img src="photos/default.jpg" title="暂无照片"><br/>
-                        <input type="file" name="photo">
-                        <input type="hidden" name="MAX_FILE_SIZE" value="300000" />
+                        <input type="file" size="40" name="photo">
                         <input type="hidden" name="user_avatar">
                     <?php
                     } else {

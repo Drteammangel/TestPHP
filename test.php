@@ -1,40 +1,35 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Bootstrap 实例 - 边框表格</title>
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src="jquery.min.js"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-</head>
-<body>
+<?php
+if ((($_FILES["file"]["type"] == "image/gif")
+        || ($_FILES["file"]["type"] == "image/jpeg")
+        || ($_FILES["file"]["type"] == "image/jpg")
+        || ($_FILES["file"]["type"] == "image/pjpeg"))
+    && ($_FILES["file"]["size"] < 20000))
+{
+    if ($_FILES["file"]["error"] > 0)
+    {
+        echo "Return Code: " . $_FILES["file"]["error"] . "<br />";
+    }
+    else
+    {
+        echo "Upload: " . $_FILES["file"]["name"] . "<br />";
+        echo "Type: " . $_FILES["file"]["type"] . "<br />";
+        echo "Size: " . ($_FILES["file"]["size"] / 1024) . " Kb<br />";
+        echo "Temp file: " . $_FILES["file"]["tmp_name"] . "<br />";
 
-<table class="table table-bordered">
-    <caption>边框表格布局</caption>
-    <thead>
-    <tr>
-        <th>名称</th>
-        <th>城市</th>
-        <th>密码</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>Tanmay</td>
-        <td>Bangalore</td>
-        <td>560001</td>
-    </tr>
-    <tr>
-        <td>Sachin</td>
-        <td>Mumbai</td>
-        <td>400003</td>
-    </tr>
-    <tr>
-        <td>Uma</td>
-        <td>Pune</td>
-        <td>411027</td>
-    </tr>
-    </tbody>
-</table>
-
-</body>
-</html>
+        if (file_exists("upload/" . $_FILES["file"]["name"]))
+        {
+            echo $_FILES["file"]["name"] . " already exists. ";
+        }
+        else
+        {
+            move_uploaded_file($_FILES["file"]["tmp_name"],
+                "upload/" . $_FILES["file"]["name"]);
+            echo "Stored in: " . "upload/" . $_FILES["file"]["name"];
+        }
+    }
+}
+else
+{
+    echo "Invalid file";
+}
+echo phpinfo();
