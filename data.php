@@ -25,7 +25,6 @@ if ($_FILES['photo']['name'] != "") {
     move_uploaded_file($_FILES['photo']['tmp_name'], $user_avatar);
 }
 echo("$user_name");
-//$sql = "insert into user_info(user_id, user_name, user_sex, user_grade, user_degree, user_comment, user_avatar) values ('" . $user_id . "','" . urlencode($user_name) . "','" . $user_sex . "','" . urlencode($user_grade) . "','" . urlencode($user_degree) . "','" . urlencode($user_comment) . "','" . $user_avatar . "')";
 $sql = "insert into user_info(user_id, user_name, user_sex, user_grade, user_degree, user_comment, user_avatar) values ('" . $user_id . "','" . $user_name . "','" . $user_sex . "','" . $user_grade . "','" . $user_degree . "','" . $user_comment . "','" . $user_avatar . "')";
 mysql_query($sql, $con) or die(mysql_error());
 echo('

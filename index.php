@@ -40,11 +40,8 @@ $result = mysql_query($sql, $con) or die(mysql_error());
         }
         //删除数据
         function DataDelete() {
-            var flag = confirm("确认删除？");
-            if (flag == true) {
-                alert("已删除");
-            } else {
-                alert("已取消");
+            if (confirm("确认删除？")) {
+                document.forms["list"].submit();
             }
         }
         //反选
@@ -87,7 +84,7 @@ $result = mysql_query($sql, $con) or die(mysql_error());
             </form>
         </div>
         <div class="panel-body">
-            <form action="update.php" method="post" name="list">
+            <form action="delete.php" method="get" name="list">
                 <table class="table table-bordered">
                     <thead>
                     <tr>
@@ -106,15 +103,15 @@ $result = mysql_query($sql, $con) or die(mysql_error());
                     <?php //显示查询结果
                     while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                         $user_id = $row['user_id'];
-                        $user_name = urldecode($row['user_name']);
+                        $user_name = $row['user_name'];
                         $user_sex = $row['user_sex'];
-                        $user_grade = urldecode($row['user_grade']);
-                        $user_degree = urldecode($row['user_degree']);
-                        $user_comment = urldecode($row['user_comment']);
+                        $user_grade = $row['user_grade'];
+                        $user_degree = $row['user_degree'];
+                        $user_comment = $row['user_comment'];
                         $user_avatar = $row['user_avatar'];
                         ?>
                         <tr>
-                            <td><input type="checkbox" name="check" id="check"></td>
+                            <td><input type="checkbox" name="check[]" id="check" value=<?php echo $user_id; ?>></td>
                             <td><?php echo $user_id; ?></td>
                             <td><?php echo $user_name; ?></td>
                             <td><?php echo $user_sex; ?></td>

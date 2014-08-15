@@ -1,12 +1,25 @@
 <?php
 include_once('mysql.php');
+include_once('photoDelete.php');
 $con = connectDb();
 
-$user_id = $_GET['user_id'];
-$sql = "delete from user_info where user_id = '$user_id'";
+$id = isset($_GET['check'])?$_GET['check']:null;
+$flag = true;
+if(isset($id)) {
+    foreach($id as $user_id) {
+        photoDelete($user_id);
+        $sql = "delete from user_info where user_id = '$user_id'";
+        $flag = mysql_query($sql, $con);
+    }
+} elseif(isset($_GET['user_id'])) {
+    $user_id = $_GET['user_id'];
+    photoDelete($user_id);
+    $sql = "delete from user_info where user_id = '$user_id'";
+    $flag = mysql_query($sql, $con);
+}
 ?>
 <?php
-if (mysql_query($sql, $con)) {
+if ($flag) {
     echo('
     <script>
         alert("删除成功！");

@@ -1,4 +1,6 @@
 <?php
+header('Cache-control: no-cache');
+
 include_once('mysql.php');
 $con = connectDb();
 
@@ -6,11 +8,11 @@ $user_id = $_GET["user_id"];
 $sql = "SELECT * FROM user_info where user_id = '$user_id'";
 $result = mysql_query($sql, $con) or die(mysql_error());
 $row = mysql_fetch_array($result, MYSQL_ASSOC);
-$user_name = urldecode($row["user_name"]);
+$user_name = $row["user_name"];
 $user_sex = $row["user_sex"];
-$user_grade = urldecode($row["user_grade"]);
-$user_degree = urldecode($row["user_degree"]);
-$user_comment = urldecode($row["user_comment"]);
+$user_grade = $row["user_grade"];
+$user_degree = $row["user_degree"];
+$user_comment = $row["user_comment"];
 $user_avatar = $row["user_avatar"];
 ?>
 
@@ -45,6 +47,7 @@ $user_avatar = $row["user_avatar"];
     </script>
 </head>
 <body>
+<?php include_once('head.php');?>
 <form action="dataUpdate.php" method="post" enctype="multipart/form-data">
     <div class="form-group" id="left">
         <table class="table">
@@ -90,6 +93,7 @@ $user_avatar = $row["user_avatar"];
                         ?>
                         <img src="photos/default.jpg" title="暂无照片"><br/>
                         <input type="file" name="photo">
+                        <input type="hidden" name="MAX_FILE_SIZE" value="300000" />
                         <input type="hidden" name="user_avatar">
                     <?php
                     } else {

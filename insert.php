@@ -38,6 +38,7 @@ header("Content-Type: text/html;charset=utf-8");
     </style>
 </head>
 <body>
+<?php include_once("head.php");?>
 <form action="data.php" method="post" enctype="multipart/form-data">
     <div class="form-group" id="left">
         <table class="table">
