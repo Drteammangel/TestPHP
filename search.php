@@ -32,15 +32,16 @@ $result = mysql_query($sql, $con) or die(mysql_error());
 	<script>
 		//打开“新增信息”窗口，居中显示
 		function DataInsert() {
-			var url = 'insert.php'; //要打开的窗口
-			var winName = '新增信息'; //给打开的窗口命名
-			var aWidth = 809; //窗口宽度,需要设置
-			var aHeight = 500; //窗口高度,需要设置
-			var aTop = (screen.availHeight - aHeight) / 2; //窗口顶部位置,一般不需要改
-			var aLeft = (screen.availWidth - aWidth) / 2; //窗口放中央,一般不需要改
-			var param0 = "scrollbars=0,status=0,menubar=0,resizable=2,location=0"; //新窗口的参数
-			var params = "top=" + aTop + ",left=" + aLeft + ",width=" + aWidth + ",height=" + aHeight + "," + param0;
-			window.open(url, winName, params);
+//			var url = 'insert.php'; //要打开的窗口
+//			var winName = '新增信息'; //给打开的窗口命名
+//			var aWidth = 809; //窗口宽度,需要设置
+//			var aHeight = 500; //窗口高度,需要设置
+//			var aTop = (screen.availHeight - aHeight) / 2; //窗口顶部位置,一般不需要改
+//			var aLeft = (screen.availWidth - aWidth) / 2; //窗口放中央,一般不需要改
+//			var param0 = "scrollbars=0,status=0,menubar=0,resizable=2,location=0"; //新窗口的参数
+//			var params = "top=" + aTop + ",left=" + aLeft + ",width=" + aWidth + ",height=" + aHeight + "," + param0;
+//			window.open(url, winName, params);
+			location.href = "insert.php";
 		}
 		//删除数据
 		function DataDelete() {
@@ -58,8 +59,21 @@ $result = mysql_query($sql, $con) or die(mysql_error());
 		//全选
 		function selectAll() {
 			var n = document.forms["list"].check.length;//得到复选框的个数
+			var isAllSelected = true;
 			for (var i = 0; i < n; i++) {
-				document.forms["list"].check[i].checked = true;
+				if (!document.forms["list"].check[i].checked) {
+					isAllSelected = false;
+					break;
+				}
+			}
+			if(isAllSelected) {
+				for (i = 0; i < n; i++) {
+					document.forms["list"].check[i].checked = false;
+				}
+			} else {
+				for (i = 0; i < n; i++) {
+					document.forms["list"].check[i].checked = true;
+				}
 			}
 		}
 		function search() {
@@ -125,7 +139,7 @@ $result = mysql_query($sql, $con) or die(mysql_error());
 							<!--                            <td>--><?php //echo $user_avatar; ?><!--</td>-->
 							<td><a href="update.php?user_id=<?php echo $user_id; ?>">修改</a>
 								<a href="delete.php?user_id=<?php echo $user_id; ?>">删除</a>
-								<a href="update.php?user_id=<?php echo $user_id; ?>">详细</a></td>
+								<a href="info.php?user_id=<?php echo $user_id; ?>">详细</a></td>
 						</tr>
 					<?php
 					}

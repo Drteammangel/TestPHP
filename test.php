@@ -24,3 +24,28 @@ class Multiplier extends OverloadableObject
 		return $one * $two * $three;
 	}
 }
+
+class Document
+{
+	private $text;
+
+	/**
+	 * @return mixed
+	 */
+	public function getText()
+	{
+		return $this->text;
+	}
+
+	/**
+	 * @param mixed $text
+	 */
+	public function setText($text)
+	{
+		$this->text = $text;
+	}
+
+}
+
+$document = new Document();
+$text = $document->getText();

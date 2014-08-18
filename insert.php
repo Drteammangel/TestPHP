@@ -6,36 +6,14 @@ header("Content-Type: text/html;charset=utf-8");
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>insert.php</title>
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="mystyle.css" rel="stylesheet">
     <script src="jquery.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
-    <style>
-        #left {
-            position: absolute;
-            left: 100px;
-            /*right: 500px;*/
-            top: 50px;
-            bottom: 400px;
-            width: 300px;
-        }
-
-        #right {
-            position: absolute;
-            left: 400px;
-            /*right: 40%;*/
-            top: 50px;
-            bottom: 400px;
-            width: 300px;
-        }
-
-        #bottom {
-            position: absolute;
-            left: 100px;
-            /*right: 30%;*/
-            top: 300px;
-            bottom: 10%;
-            width: 600px;
-        }
-    </style>
+	<script>
+		function returnHome(){
+			location.href = "index.php";
+		}
+	</script>
 </head>
 <body>
 <?php include_once("head.php");?>
@@ -44,10 +22,10 @@ header("Content-Type: text/html;charset=utf-8");
         <table class="table">
             <caption>新增信息</caption>
             <tbody>
-            <tr>
-                <th>id</th>
-                <td><input type="text" name="user_id"></td>
-            </tr>
+<!--            <tr>-->
+<!--                <th>id</th>-->
+<!--                <td><input type="text" name="user_id"></td>-->
+<!--            </tr>-->
             <tr>
                 <th>姓名</th>
                 <td><input type="text" name="user_name"></td>
@@ -86,6 +64,7 @@ header("Content-Type: text/html;charset=utf-8");
             </tr>
         </table>
         <input type="submit" value="提交">
+	    <input type="button" onclick="returnHome()" value="返回">
     </div>
 </form>
 </body>

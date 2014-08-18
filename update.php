@@ -55,7 +55,7 @@ $user_avatar = $row["user_avatar"];
             <tbody>
             <tr>
                 <th>id</th>
-                <td><input type="text" name="user_id" value="<?php echo $user_id ?>"></td>
+                <td><input readonly type="text" name="user_id" value="<?php echo $user_id ?>"></td>
             </tr>
             <tr>
                 <th>姓名</th>
