@@ -54,26 +54,28 @@ $user_avatar = $row["user_avatar"];
 			<caption>修改信息</caption>
 			<tbody>
 			<tr>
-				<th>id</th>
-				<td><input readonly type="text" name="user_id" value="<?php echo $user_id ?>"></td>
+				<th><label for="user_id">id</label></th>
+				<td><input readonly type="text" name="user_id" id="user_id" value="<?php echo $user_id ?>"></td>
 			</tr>
 			<tr>
-				<th>姓名</th>
-				<td><input readonly type="text" name="user_name" value="<?php echo $user_name ?>"></td>
+				<th><label for="user_name">姓名</label></th>
+				<td><input readonly type="text" name="user_name" id="user_name" value="<?php echo $user_name ?>"></td>
 			</tr>
 			<tr>
 				<th>性别</th>
-				<td><input readonly type="radio" name="sex" <?php if ($user_sex == "male") echo("checked") ?>>男
-					<input readonly type="radio" name="sex" <?php if ($user_sex == "female") echo("checked") ?>>女
+				<td><input readonly type="radio" name="sex" id="male" <?php if ($user_sex == "male") echo("checked") ?>>
+					<label for="male">男</label>
+					<input readonly type="radio" name="sex" id="female" <?php if ($user_sex == "female") echo("checked") ?>>
+					<label for="female">女</label>
 					<input readonly type="hidden" name="user_sex"></td>
 			</tr>
 			<tr>
-				<th>年级</th>
-				<td><input readonly type="text" name="user_grade" value="<?php echo $user_grade ?>"></td>
+				<th><label for="user_grade">年级</label></th>
+				<td><input readonly type="text" name="user_grade" id="user_grade" value="<?php echo $user_grade ?>"></td>
 			</tr>
 			<tr>
-				<th>学历</th>
-				<td><input readonly type="text" name="user_degree" value="<?php echo $user_degree ?>"></td>
+				<th><label for="user_degree">学历</label></th>
+				<td><input readonly type="text" name="user_degree" id="user_degree" value="<?php echo $user_degree ?>"></td>
 			</tr>
 			</tbody>
 		</table>
@@ -107,8 +109,8 @@ $user_avatar = $row["user_avatar"];
 	<div class="form-group" id="bottom">
 		<table class="table">
 			<tr>
-				<th colspan="3">备注</th>
-				<td colspan="3"><textarea readonly rows="5" cols="60" name="user_comment"
+				<th colspan="3"><label for="user_comment">备注</label></th>
+				<td colspan="3"><textarea readonly rows="5" cols="60" name="user_comment" id="user_comment"
 				                          style="resize: none;"><?php echo $user_comment ?></textarea>
 				</td>
 			</tr>
